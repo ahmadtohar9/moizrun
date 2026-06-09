@@ -21,6 +21,11 @@ require_once __DIR__ . '/db.php';
     
     <!-- Styling -->
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff007f">
+    <link rel="apple-touch-icon" href="css/images/icon-192.png">
 </head>
 <body>
 
@@ -550,5 +555,16 @@ require_once __DIR__ . '/db.php';
 
     <!-- Application Script -->
     <script src="js/app.js"></script>
+    
+    <!-- Register PWA Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((reg) => console.log('PWA Service Worker registered successfully:', reg.scope))
+                    .catch((err) => console.error('PWA Service Worker registration failed:', err));
+            });
+        }
+    </script>
 </body>
 </html>
