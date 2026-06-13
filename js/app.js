@@ -1579,8 +1579,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show step-by-step installation instructions for iOS Safari users
         const iosHtml = `
             <div style="font-size: 14px; color: var(--text-main); line-height: 1.6; text-align: left;">
-                <p style="font-weight: 600; margin-bottom: 8px; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+                <p style="font-weight: 600; margin-bottom: 2px; color: var(--primary); display: flex; align-items: center; gap: 6px;">
                     📲 Pasang MoizRun di iPhone/iPad:
+                </p>
+                <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px; font-style: italic;">
+                    (Panduan manual - ikuti petunjuk menu Safari di bawah layar Anda)
                 </p>
                 <ol style="padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 4px;">
                     <li>Ketuk tombol <b>Share</b> di menu bawah Safari (ikon <svg style="width:16px;height:16px;display:inline-block;vertical-align:middle;color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>).</li>
