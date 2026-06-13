@@ -59,6 +59,10 @@ require_once __DIR__ . '/db.php';
     <!-- App Shell Container (Mobile-First Frame) -->
     <div class="app-container" id="app-shell">
         
+        <!-- Background Glow Blobs for Premium Feel -->
+        <div class="glow-blob blob-1"></div>
+        <div class="glow-blob blob-2"></div>
+        
         <!-- ================= PAGE 1: LANDING ================= -->
         <div class="page active" id="page-landing">
             <div class="auth-header text-center mb-6" style="margin-top: 20px;">
