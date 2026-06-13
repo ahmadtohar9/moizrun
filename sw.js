@@ -49,6 +49,9 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Event - Serve from cache if offline or fetch from network
 self.addEventListener('fetch', (event) => {
+  // Only intercept GET requests
+  if (event.request.method !== 'GET') return;
+
   // Only intercept HTTP/HTTPS schemes (not chrome-extension or other protocols)
   if (!event.request.url.startsWith('http')) return;
 
