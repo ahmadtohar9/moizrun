@@ -94,30 +94,38 @@ require_once __DIR__ . '/db.php';
 
         <!-- ================= PAGE 2: LOGIN ================= -->
         <div class="page" id="page-login">
-            <h2>Masuk Akun</h2>
-            <p class="mb-6">Silakan login untuk mulai merekam aktivitas lari Anda.</p>
+            <div class="auth-header text-center mb-6">
+                <div class="avatar-ring mb-3 animate-pulse-slow" style="width: 64px; height: 64px; padding: 2px; margin: 0 auto;">
+                    <div class="avatar-inner" style="font-size: 28px;"><?= htmlspecialchars(getSetting('app_logo', '🏃')) ?></div>
+                </div>
+                <h2>Masuk ke MoizRun</h2>
+                <p>Silakan login untuk mulai merekam aktivitas lari Anda.</p>
+            </div>
             
-            <form id="login-form" autocomplete="off">
-                <div class="form-group">
-                    <label for="login-username">Username</label>
-                    <div class="input-container">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                        <input type="text" id="login-username" placeholder="Masukkan username" required>
+            <div class="card auth-card">
+                <form id="login-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            <input type="text" id="login-username" placeholder="Masukkan username" required>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <div class="input-container">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                        <input type="password" id="login-password" placeholder="Masukkan password" required>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            <input type="password" id="login-password" placeholder="Masukkan password" required>
+                        </div>
                     </div>
-                </div>
-                
-                <button type="submit" id="btn-login-submit" class="btn mt-6">
-                    <span>Masuk</span>
-                </button>
-            </form>
+                    
+                    <button type="submit" id="btn-login-submit" class="btn btn-pulse mt-6">
+                        <span>Masuk</span>
+                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                    </button>
+                </form>
+            </div>
             
             <p class="text-center mt-6">Belum memiliki akun? <a id="link-login-register" onclick="navigateTo('register')" class="link-action">Daftar di sini</a></p>
 
