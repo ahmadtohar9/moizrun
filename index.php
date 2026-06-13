@@ -78,7 +78,17 @@ require_once __DIR__ . '/db.php';
                     <span>Masuk ke Akun</span>
                     <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
                 </button>
-                <p>Belum punya akun? <a id="link-landing-register" onclick="navigateTo('register')" class="link-action">Daftar Sekarang</a></p>
+                <p class="mb-4">Belum punya akun? <a id="link-landing-register" onclick="navigateTo('register')" class="link-action">Daftar Sekarang</a></p>
+                
+                <!-- Install App Prompts (Only shown if PWA is installable) -->
+                <div id="pwa-install-container" class="card mt-4" style="display: none; width: 100%; border: 1px dashed var(--primary); background: rgba(255, 0, 127, 0.05); padding: 16px; border-radius: 16px;">
+                    <p style="font-size: 14px; color: var(--text-main); margin-bottom: 12px; font-weight: 500;">
+                        📲 Pasang aplikasi di HP Anda untuk akses lebih cepat & offline!
+                    </p>
+                    <button id="btn-pwa-install" class="btn" style="background: linear-gradient(135deg, var(--primary), #ff0055); width: auto; font-size: 14px; padding: 8px 16px; margin: 0 auto;">
+                        <span>Pasang Aplikasi</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -110,6 +120,16 @@ require_once __DIR__ . '/db.php';
             </form>
             
             <p class="text-center mt-6">Belum memiliki akun? <a id="link-login-register" onclick="navigateTo('register')" class="link-action">Daftar di sini</a></p>
+
+            <!-- Install App Prompts for Login Page -->
+            <div id="pwa-install-container-login" class="card mt-6" style="display: none; text-align: center; border: 1px dashed var(--primary); background: rgba(255, 0, 127, 0.05); padding: 16px; border-radius: 16px;">
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 12px; font-weight: 500;">
+                    📲 Pasang aplikasi di HP Anda untuk akses lebih cepat & offline!
+                </p>
+                <button id="btn-pwa-install-login" class="btn" style="background: linear-gradient(135deg, var(--primary), #ff0055); width: auto; font-size: 14px; padding: 8px 16px; margin: 0 auto;">
+                    <span>Pasang Aplikasi</span>
+                </button>
+            </div>
         </div>
 
         <!-- ================= PAGE 3: REGISTER ================= -->

@@ -1562,4 +1562,79 @@ document.addEventListener('DOMContentLoaded', () => {
             maleBox.classList.remove('selected');
         });
     }
+
+    // 4. PWA Custom Installation Button & iOS User Guide Logic
+    let deferredPrompt;
+    const installContainer = document.getElementById('pwa-install-container');
+    const installBtn = document.getElementById('btn-pwa-install');
+    const installContainerLogin = document.getElementById('pwa-install-container-login');
+    const installBtnLogin = document.getElementById('btn-pwa-install-login');
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    if (isIOS && !isStandalone) {
+        // Show step-by-step installation instructions for iOS Safari users
+        const iosHtml = `
+            <div style="font-size: 14px; color: var(--text-main); line-height: 1.6; text-align: left;">
+                <p style="font-weight: 600; margin-bottom: 8px; color: var(--primary); display: flex; align-items: center; gap: 6px;">
+                    📲 Pasang MoizRun di iPhone/iPad:
+                </p>
+                <ol style="padding-left: 20px; margin: 0; display: flex; flex-direction: column; gap: 4px;">
+                    <li>Ketuk tombol <b>Share</b> di menu bawah Safari (ikon <svg style="width:16px;height:16px;display:inline-block;vertical-align:middle;color:var(--primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>).</li>
+                    <li>Geser ke bawah lalu pilih opsi <b>"Add to Home Screen"</b> (Tambahkan ke Layar Utama).</li>
+                </ol>
+            </div>
+        `;
+        if (installContainer) {
+            installContainer.innerHTML = iosHtml;
+            installContainer.style.display = 'block';
+            installContainer.style.background = 'rgba(255, 255, 255, 0.03)';
+            installContainer.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+        if (installContainerLogin) {
+            installContainerLogin.innerHTML = iosHtml;
+            installContainerLogin.style.display = 'block';
+            installContainerLogin.style.background = 'rgba(255, 255, 255, 0.03)';
+            installContainerLogin.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+    } else {
+        // Handle standard PWA installation prompt for Chrome/Edge/Firefox/Android
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI to notify the user they can install the PWA
+            if (installContainer) installContainer.style.display = 'block';
+            if (installContainerLogin) installContainerLogin.style.display = 'block';
+        });
+
+        const triggerPrompt = async () => {
+            if (!deferredPrompt) return;
+            // Show the prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            // We've used the prompt, and can't use it again, discard it
+            deferredPrompt = null;
+            // Hide the install containers
+            if (installContainer) installContainer.style.display = 'none';
+            if (installContainerLogin) installContainerLogin.style.display = 'none';
+        };
+
+        if (installBtn) {
+            installBtn.addEventListener('click', triggerPrompt);
+        }
+        if (installBtnLogin) {
+            installBtnLogin.addEventListener('click', triggerPrompt);
+        }
+
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('PWA was successfully installed!');
+            if (installContainer) installContainer.style.display = 'none';
+            if (installContainerLogin) installContainerLogin.style.display = 'none';
+        });
+    }
 });
