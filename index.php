@@ -5,6 +5,21 @@
  * Halaman utama aplikasi yang berfungsi sebagai Single Page Application (SPA).
  * Memuat semua halaman modal/container dan memproses perpindahan halaman via js/app.js.
  */
+
+// Enforce trailing slash for subfolder hosting to ensure Service Worker and manifest scope work properly
+$requestUri = $_SERVER['REQUEST_URI'];
+$scriptName = $_SERVER['SCRIPT_NAME'];
+$dirName = rtrim(dirname($scriptName), '/\\');
+
+if ($dirName !== '' && $dirName !== '/') {
+    $requestPath = parse_url($requestUri, PHP_URL_PATH);
+    if ($requestPath === $dirName) {
+        $queryString = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] !== '' ? '?' . $_SERVER['QUERY_STRING'] : '';
+        header('Location: ' . $dirName . '/' . $queryString, true, 301);
+        exit;
+    }
+}
+
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/db.php';
 ?>
@@ -23,9 +38,15 @@ require_once __DIR__ . '/db.php';
     <link rel="stylesheet" href="css/style.css">
     
     <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <?php
+    $base_path = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    if ($base_path !== '' && $base_path[0] !== '/') {
+        $base_path = '/' . $base_path;
+    }
+    ?>
+    <link rel="manifest" href="<?= $base_path ?>/manifest.json">
     <meta name="theme-color" content="#ff007f">
-    <link rel="apple-touch-icon" href="css/images/icon-192.png">
+    <link rel="apple-touch-icon" href="<?= $base_path ?>/css/images/icon-192.png">
 </head>
 <body>
 
@@ -560,7 +581,7 @@ require_once __DIR__ . '/db.php';
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
+                navigator.serviceWorker.register('<?= $base_path ?>/sw.js')
                     .then((reg) => console.log('PWA Service Worker registered successfully:', reg.scope))
                     .catch((err) => console.error('PWA Service Worker registration failed:', err));
             });

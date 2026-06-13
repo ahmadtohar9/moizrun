@@ -17,7 +17,14 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('PWA Cache initialized.');
-      return cache.addAll(ASSETS_TO_CACHE);
+      // Use Promise.allSettled to prevent registration failure if a single non-critical asset fails to cache
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map(asset => 
+          cache.add(asset).catch(err => {
+            console.warn(`Failed to cache asset: ${asset}`, err);
+          })
+        )
+      );
     })
   );
   self.skipWaiting();
