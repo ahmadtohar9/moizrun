@@ -135,7 +135,7 @@ switch ($action) {
         }
 
         try {
-            $stmt = $db->prepare("SELECT id FROM users WHERE phone = ? AND dob = ?");
+            $stmt = $db->prepare("SELECT id, username FROM users WHERE phone = ? AND dob = ?");
             $stmt->execute([$phone, $dob]);
             $user = $stmt->fetch();
 
@@ -144,7 +144,9 @@ switch ($action) {
             }
 
             $_SESSION['recovery_user_id'] = $user['id'];
-            sendResponse('success', 'Akun berhasil diverifikasi.');
+            sendResponse('success', 'Akun berhasil diverifikasi.', [
+                'username' => $user['username']
+            ]);
         } catch (PDOException $e) {
             sendResponse('error', 'Gagal memverifikasi: ' . $e->getMessage());
         }

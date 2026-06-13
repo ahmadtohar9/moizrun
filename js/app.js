@@ -604,7 +604,22 @@ async function handleForgotPassword(e) {
     e.preventDefault();
     
     const phone = document.getElementById('forgot-phone').value.trim();
-    const dob = document.getElementById('forgot-dob').value;
+    const dobInput = document.getElementById('forgot-dob').value.trim();
+    
+    // Parse DD-MM-YYYY atau DD/MM/YYYY ke YYYY-MM-DD
+    let dob = dobInput;
+    const dobRegex = /^(\d{2})[-/](\d{2})[-/](\d{4})$/;
+    const match = dobInput.match(dobRegex);
+    if (match) {
+        dob = `${match[3]}-${match[2]}-${match[1]}`; // YYYY-MM-DD
+    } else {
+        // Fallback jika pengguna menginputkan format ISO YYYY-MM-DD secara langsung
+        const isoRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!isoRegex.test(dobInput)) {
+            showAlert('Format Tanggal Lahir salah! Gunakan format DD-MM-YYYY (Contoh: 17-08-1945)', 'error');
+            return;
+        }
+    }
     
     showLoading(true);
     const res = await apiCall('verify_recovery', { phone, dob });
@@ -612,6 +627,13 @@ async function handleForgotPassword(e) {
     
     if (res.status === 'success') {
         showAlert(res.message, 'success');
+        
+        // Tampilkan username agar pengguna ingat
+        const usernameDisplay = document.getElementById('recovery-username-display');
+        if (usernameDisplay && res.username) {
+            usernameDisplay.innerText = res.username;
+        }
+        
         // Progress to Step 2
         document.getElementById('recovery-step-1').style.display = 'none';
         document.getElementById('recovery-step-2').style.display = 'block';

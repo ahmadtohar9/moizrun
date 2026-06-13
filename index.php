@@ -177,7 +177,7 @@ require_once __DIR__ . '/db.php';
                         <label for="forgot-dob">Tanggal Lahir</label>
                         <div class="input-container">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <input type="date" id="forgot-dob" required>
+                            <input type="text" id="forgot-dob" placeholder="Format: DD-MM-YYYY (Contoh: 17-08-1945)" required>
                         </div>
                     </div>
                     
@@ -190,6 +190,13 @@ require_once __DIR__ . '/db.php';
             
             <!-- Step 2: Reset Form (Hidden initially) -->
             <div class="card auth-card" id="recovery-step-2" style="display: none;">
+                <div style="background: rgba(255, 0, 127, 0.04); border: 1px solid rgba(255, 0, 127, 0.15); border-radius: 14px; padding: 12px 16px; margin-bottom: 20px; font-size: 14px; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 18px;">👤</span>
+                    <div>
+                        <span style="color: var(--text-muted); font-size: 12px; display: block;">Username Anda:</span>
+                        <strong id="recovery-username-display" style="color: var(--primary); font-weight: 700; font-size: 15px;">-</strong>
+                    </div>
+                </div>
                 <form id="reset-password-form" autocomplete="off">
                     <div class="form-group">
                         <label for="reset-new-password">Password Baru</label>
