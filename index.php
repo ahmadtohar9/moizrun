@@ -135,7 +135,11 @@ require_once __DIR__ . '/db.php';
                 </form>
             </div>
             
-            <p class="text-center mt-6">Belum memiliki akun? <a id="link-login-register" onclick="navigateTo('register')" class="link-action">Daftar di sini</a></p>
+            <p class="text-center mt-6">
+                Belum memiliki akun? <a id="link-login-register" onclick="navigateTo('register')" class="link-action">Daftar di sini</a>
+                <br><br>
+                <a onclick="navigateTo('forgot-password')" class="link-action" style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Lupa Password?</a>
+            </p>
 
             <!-- Install App Prompts for Login Page -->
             <div id="pwa-install-container-login" class="card mt-6" style="display: none; text-align: center; border: 1px dashed var(--primary); background: rgba(255, 0, 127, 0.05); padding: 16px; border-radius: 16px;">
@@ -146,6 +150,79 @@ require_once __DIR__ . '/db.php';
                     <span>Pasang Aplikasi</span>
                 </button>
             </div>
+        </div>
+
+        <!-- ================= PAGE: FORGOT PASSWORD ================= -->
+        <div class="page" id="page-forgot-password">
+            <div class="auth-header text-center mb-6" style="margin-top: 20px;">
+                <div class="avatar-ring mb-3 animate-pulse-slow" style="width: 64px; height: 64px; padding: 2px; margin: 0 auto;">
+                    <div class="avatar-inner" style="font-size: 28px;">🔑</div>
+                </div>
+                <h2>Lupa Password</h2>
+                <p>Verifikasi data akun Anda untuk menyetel ulang password.</p>
+            </div>
+            
+            <!-- Step 1: Verification Form -->
+            <div class="card auth-card" id="recovery-step-1">
+                <form id="forgot-password-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="forgot-username">Username</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            <input type="text" id="forgot-username" placeholder="Masukkan username Anda" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="forgot-phone">Nomor HP</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            <input type="tel" id="forgot-phone" placeholder="Contoh: 08123456789" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="forgot-dob">Tanggal Lahir</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <input type="date" id="forgot-dob" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="btn-forgot-submit" class="btn btn-pulse mt-6">
+                        <span>Verifikasi Akun</span>
+                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Step 2: Reset Form (Hidden initially) -->
+            <div class="card auth-card" id="recovery-step-2" style="display: none;">
+                <form id="reset-password-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="reset-new-password">Password Baru</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            <input type="password" id="reset-new-password" placeholder="Masukkan password baru" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reset-confirm-password">Konfirmasi Password Baru</label>
+                        <div class="input-container">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            <input type="password" id="reset-confirm-password" placeholder="Ulangi password baru" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" id="btn-reset-submit" class="btn btn-pulse mt-6">
+                        <span>Simpan Password</span>
+                        <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    </button>
+                </form>
+            </div>
+            
+            <p class="text-center mt-6"><a id="link-forgot-back" onclick="navigateTo('login')" class="link-action">Kembali ke Login</a></p>
         </div>
 
         <!-- ================= PAGE 3: REGISTER ================= -->

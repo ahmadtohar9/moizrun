@@ -74,7 +74,7 @@ function getIndicator(key) {
 // DOM Elements & Routing
 const pages = [
     'landing', 'login', 'register', 'dashboard', 
-    'pre-run', 'post-run', 'evaluation', 'history'
+    'pre-run', 'post-run', 'evaluation', 'history', 'forgot-password'
 ];
 
 function navigateTo(pageId) {
@@ -165,7 +165,17 @@ function onPageShow(pageId) {
         case 'post-run':
             initPostRunForm();
             break;
+        case 'forgot-password':
+            initForgotPasswordForm();
+            break;
     }
+}
+
+function initForgotPasswordForm() {
+    document.getElementById('forgot-password-form').reset();
+    document.getElementById('reset-password-form').reset();
+    document.getElementById('recovery-step-1').style.display = 'block';
+    document.getElementById('recovery-step-2').style.display = 'none';
 }
 
 // Show/Hide global loading spinner
@@ -584,6 +594,60 @@ async function handleLogout() {
         state.history = [];
         showAlert(res.message, 'success');
         navigateTo('landing');
+    } else {
+        showAlert(res.message, 'error');
+    }
+}
+
+// Handler Forgot Password (Step 1: Verification)
+async function handleForgotPassword(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('forgot-username').value.trim();
+    const phone = document.getElementById('forgot-phone').value.trim();
+    const dob = document.getElementById('forgot-dob').value;
+    
+    showLoading(true);
+    const res = await apiCall('verify_recovery', { username, phone, dob });
+    showLoading(false);
+    
+    if (res.status === 'success') {
+        showAlert(res.message, 'success');
+        // Progress to Step 2
+        document.getElementById('recovery-step-1').style.display = 'none';
+        document.getElementById('recovery-step-2').style.display = 'block';
+        document.getElementById('reset-new-password').focus();
+    } else {
+        showAlert(res.message, 'error');
+    }
+}
+
+// Handler Reset Password (Step 2: Save New Password)
+async function handleResetPassword(e) {
+    e.preventDefault();
+    
+    const password = document.getElementById('reset-new-password').value;
+    const confirmPassword = document.getElementById('reset-confirm-password').value;
+    
+    if (password !== confirmPassword) {
+        showAlert('Password baru dan konfirmasi password tidak cocok!', 'error');
+        return;
+    }
+    
+    showLoading(true);
+    const res = await apiCall('reset_password', { password });
+    showLoading(false);
+    
+    if (res.status === 'success') {
+        showAlert(res.message, 'success');
+        
+        // Reset recovery forms state
+        document.getElementById('forgot-password-form').reset();
+        document.getElementById('reset-password-form').reset();
+        document.getElementById('recovery-step-2').style.display = 'none';
+        document.getElementById('recovery-step-1').style.display = 'block';
+        
+        navigateTo('login');
     } else {
         showAlert(res.message, 'error');
     }
@@ -1545,6 +1609,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const postForm = document.getElementById('post-run-form');
     if (postForm) postForm.addEventListener('submit', handlePostRunSubmit);
+
+    const forgotForm = document.getElementById('forgot-password-form');
+    if (forgotForm) forgotForm.addEventListener('submit', handleForgotPassword);
+
+    const resetForm = document.getElementById('reset-password-form');
+    if (resetForm) resetForm.addEventListener('submit', handleResetPassword);
     
     // 3. Setup Gender Switch di Pendaftaran
     const maleBox = document.getElementById('gender-male');

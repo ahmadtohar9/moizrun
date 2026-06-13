@@ -126,6 +126,56 @@ switch ($action) {
         }
         break;
 
+    case 'verify_recovery':
+        $username = strtolower(trim($requestData['username'] ?? ''));
+        $phone = trim($requestData['phone'] ?? '');
+        $dob = trim($requestData['dob'] ?? '');
+
+        if (empty($username) || empty($phone) || empty($dob)) {
+            sendResponse('error', 'Semua kolom verifikasi wajib diisi.');
+        }
+
+        try {
+            $stmt = $db->prepare("SELECT id FROM users WHERE username = ? AND phone = ? AND dob = ?");
+            $stmt->execute([$username, $phone, $dob]);
+            $user = $stmt->fetch();
+
+            if (!$user) {
+                sendResponse('error', 'Data akun tidak cocok dengan data pendaftaran kami.');
+            }
+
+            $_SESSION['recovery_user_id'] = $user['id'];
+            sendResponse('success', 'Akun berhasil diverifikasi.');
+        } catch (PDOException $e) {
+            sendResponse('error', 'Gagal memverifikasi: ' . $e->getMessage());
+        }
+        break;
+
+    case 'reset_password':
+        $password = $requestData['password'] ?? '';
+
+        if (empty($password)) {
+            sendResponse('error', 'Password baru wajib diisi.');
+        }
+
+        if (!isset($_SESSION['recovery_user_id'])) {
+            sendResponse('error', 'Akses ditolak. Silakan lakukan verifikasi ulang.');
+        }
+
+        try {
+            $userId = $_SESSION['recovery_user_id'];
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+            $stmt = $db->prepare("UPDATE users SET password = ? WHERE id = ?");
+            $stmt->execute([$hashedPassword, $userId]);
+
+            unset($_SESSION['recovery_user_id']);
+            sendResponse('success', 'Password Anda berhasil disetel ulang. Silakan login menggunakan password baru.');
+        } catch (PDOException $e) {
+            sendResponse('error', 'Gagal menyetel ulang password: ' . $e->getMessage());
+        }
+        break;
+
     case 'logout':
         $_SESSION = [];
         if (ini_get("session.use_cookies")) {
