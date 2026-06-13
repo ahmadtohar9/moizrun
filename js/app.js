@@ -603,12 +603,11 @@ async function handleLogout() {
 async function handleForgotPassword(e) {
     e.preventDefault();
     
-    const username = document.getElementById('forgot-username').value.trim();
     const phone = document.getElementById('forgot-phone').value.trim();
     const dob = document.getElementById('forgot-dob').value;
     
     showLoading(true);
-    const res = await apiCall('verify_recovery', { username, phone, dob });
+    const res = await apiCall('verify_recovery', { phone, dob });
     showLoading(false);
     
     if (res.status === 'success') {

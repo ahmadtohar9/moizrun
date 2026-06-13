@@ -166,14 +166,6 @@ require_once __DIR__ . '/db.php';
             <div class="card auth-card" id="recovery-step-1">
                 <form id="forgot-password-form" autocomplete="off">
                     <div class="form-group">
-                        <label for="forgot-username">Username</label>
-                        <div class="input-container">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                            <input type="text" id="forgot-username" placeholder="Masukkan username Anda" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
                         <label for="forgot-phone">Nomor HP</label>
                         <div class="input-container">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>

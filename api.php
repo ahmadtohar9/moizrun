@@ -127,21 +127,20 @@ switch ($action) {
         break;
 
     case 'verify_recovery':
-        $username = strtolower(trim($requestData['username'] ?? ''));
         $phone = trim($requestData['phone'] ?? '');
         $dob = trim($requestData['dob'] ?? '');
 
-        if (empty($username) || empty($phone) || empty($dob)) {
+        if (empty($phone) || empty($dob)) {
             sendResponse('error', 'Semua kolom verifikasi wajib diisi.');
         }
 
         try {
-            $stmt = $db->prepare("SELECT id FROM users WHERE username = ? AND phone = ? AND dob = ?");
-            $stmt->execute([$username, $phone, $dob]);
+            $stmt = $db->prepare("SELECT id FROM users WHERE phone = ? AND dob = ?");
+            $stmt->execute([$phone, $dob]);
             $user = $stmt->fetch();
 
             if (!$user) {
-                sendResponse('error', 'Data akun tidak cocok dengan data pendaftaran kami.');
+                sendResponse('error', 'Nomor HP atau tanggal lahir salah, data tidak cocok.');
             }
 
             $_SESSION['recovery_user_id'] = $user['id'];
