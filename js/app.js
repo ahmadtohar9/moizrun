@@ -1570,7 +1570,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const installContainerLogin = document.getElementById('pwa-install-container-login');
     const installBtnLogin = document.getElementById('btn-pwa-install-login');
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isIOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) || 
+                  /iPad|iPhone|iPod/i.test(navigator.platform) || 
+                  (navigator.userAgent.includes("Mac") && "ontouchend" in document);
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
     if (isIOS && !isStandalone) {
