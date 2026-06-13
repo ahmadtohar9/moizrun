@@ -8,7 +8,24 @@
 
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../db.php';
+
+// Check if vendor autoloader exists
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    die("Gagal mengekspor PDF. Folder 'vendor' tidak ditemukan. Silakan jalankan 'composer install' di server/CyberPanel Anda atau pastikan folder 'vendor' telah diunggah dengan lengkap.");
+}
 require_once __DIR__ . '/../vendor/autoload.php';
+
+// Check for required PHP extensions
+$required_extensions = ['mbstring', 'gd', 'xml', 'zip'];
+$missing_extensions = [];
+foreach ($required_extensions as $ext) {
+    if (!extension_loaded($ext)) {
+        $missing_extensions[] = $ext;
+    }
+}
+if (!empty($missing_extensions)) {
+    die("Gagal mengekspor PDF. PHP Extension berikut belum aktif di server/CyberPanel Anda: " . implode(', ', $missing_extensions) . ". Silakan aktifkan extension ini di menu PHP Configuration CyberPanel Anda.");
+}
 
 // Proteksi Akses Admin
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -475,15 +492,21 @@ $html .= '
 </html>
 ';
 
-// Render ke mPDF
 try {
+    // Define a writeable temp directory for mPDF to avoid open_basedir / permissions errors on CyberPanel
+    $tempDir = __DIR__ . '/tmp';
+    if (!is_dir($tempDir)) {
+        mkdir($tempDir, 0777, true);
+    }
+
     $mpdf = new \Mpdf\Mpdf([
         'mode' => 'utf-8',
         'format' => 'A4',
         'margin_left' => 15,
         'margin_right' => 15,
         'margin_top' => 15,
-        'margin_bottom' => 15
+        'margin_bottom' => 15,
+        'tempDir' => $tempDir
     ]);
     
     // Set Document Properties

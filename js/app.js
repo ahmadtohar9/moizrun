@@ -80,35 +80,45 @@ const pages = [
 function navigateTo(pageId) {
     if (!pages.includes(pageId)) return;
     
-    // Auto populate inputs when ending a run
-    if (pageId === 'post-run' && state.activeRun) {
-        if (state.timerInterval) clearInterval(state.timerInterval);
-        state.timerInterval = null;
+    // Show loading overlay
+    showLoading(true);
+    
+    setTimeout(() => {
+        // Auto populate inputs when ending a run
+        if (pageId === 'post-run' && state.activeRun) {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            state.timerInterval = null;
+            
+            const durationMin = Math.max(1, Math.ceil(state.secondsElapsed / 60));
+            const durInput = document.getElementById('post-duration');
+            if (durInput) durInput.value = durationMin;
+            
+            const lapsInput = document.getElementById('post-laps');
+            if (lapsInput) lapsInput.value = state.lapsCount;
+        }
         
-        const durationMin = Math.max(1, Math.ceil(state.secondsElapsed / 60));
-        const durInput = document.getElementById('post-duration');
-        if (durInput) durInput.value = durationMin;
+        // Hide all pages
+        pages.forEach(p => {
+            const el = document.getElementById(`page-${p}`);
+            if (el) el.classList.remove('active');
+        });
         
-        const lapsInput = document.getElementById('post-laps');
-        if (lapsInput) lapsInput.value = state.lapsCount;
-    }
-    
-    // Hide all pages
-    pages.forEach(p => {
-        const el = document.getElementById(`page-${p}`);
-        if (el) el.classList.remove('active');
-    });
-    
-    // Show target page
-    const targetEl = document.getElementById(`page-${pageId}`);
-    if (targetEl) {
-        targetEl.classList.add('active');
-        // Trigger page-specific loads
-        onPageShow(pageId);
-    }
-    
-    // Manage active navigation menu
-    updateActiveNav(pageId);
+        // Show target page
+        const targetEl = document.getElementById(`page-${pageId}`);
+        if (targetEl) {
+            targetEl.classList.add('active');
+            // Trigger page-specific loads
+            onPageShow(pageId);
+        }
+        
+        // Manage active navigation menu
+        updateActiveNav(pageId);
+        
+        // Hide loading overlay after rendering is complete
+        setTimeout(() => {
+            showLoading(false);
+        }, 100);
+    }, 200); // 200ms visual transition delay
 }
 
 function updateActiveNav(pageId) {

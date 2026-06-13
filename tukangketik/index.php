@@ -540,6 +540,7 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
             overflow-x: auto;
             border-radius: 12px;
             border: 1px solid var(--card-border);
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
@@ -547,6 +548,10 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
             border-collapse: collapse;
             text-align: left;
             font-size: 13.5px;
+        }
+
+        .table-responsive table {
+            min-width: 950px;
         }
 
         th {
@@ -557,12 +562,29 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
             border-bottom: 1.5px solid var(--card-border);
             font-size: 12px;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         td {
             padding: 14px 16px;
             border-bottom: 1px solid rgba(0,0,0,0.03);
             color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .col-name {
+            min-width: 180px;
+            white-space: normal !important;
+        }
+
+        .col-location {
+            min-width: 180px;
+            white-space: normal !important;
+        }
+
+        .col-address {
+            min-width: 220px;
+            white-space: normal !important;
         }
 
         tr:hover td {
@@ -730,10 +752,12 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
 
         /* Badge status runs */
         .run-badge {
+            display: inline-block;
+            white-space: nowrap;
             font-size: 11px;
             font-weight: 700;
             color: white;
-            padding: 2px 8px;
+            padding: 4px 10px;
             border-radius: 6px;
         }
 
@@ -808,6 +832,14 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
             }
             body.print-runs-only #recent-runs-sec th, body.print-runs-only #recent-runs-sec td {
                 border: 1px solid #cbd5e1;
+            }
+            
+            /* Reset min-width and wrapping for printing */
+            .table-responsive table {
+                min-width: 100% !important;
+            }
+            .table-responsive th, .table-responsive td {
+                white-space: normal !important;
             }
             
             /* Jika mencetak QR saja */
@@ -1400,11 +1432,11 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                                 <thead>
                                     <tr>
                                         <th style="width: 50px; text-align: center;">No.</th>
-                                        <th>Nama Pelari</th>
+                                        <th class="col-name">Nama Pelari</th>
                                         <th>Usia</th>
                                         <th>Gender</th>
                                         <th>No. Handphone</th>
-                                        <th>Alamat Domisili</th>
+                                        <th class="col-address">Alamat Domisili</th>
                                         <th>Terdaftar Pada</th>
                                         <th style="text-align: center;">Aksi</th>
                                     </tr>
@@ -1437,14 +1469,14 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                                 <thead>
                                     <tr>
                                         <th style="width: 50px; text-align: center;">No.</th>
-                                        <th>Nama Pelari</th>
-                                        <th>Lokasi Lari</th>
+                                        <th class="col-name">Nama Pelari</th>
+                                        <th class="col-location">Lokasi Lari</th>
                                         <th>Tanggal Lari</th>
                                         <th>Lap</th>
                                         <th>Jarak</th>
                                         <th>Durasi</th>
                                         <th>Kalori</th>
-                                        <th>Skor</th>
+                                        <th style="text-align: center;">Skor</th>
                                     </tr>
                                 </thead>
                                 <tbody id="runs-table-body">
@@ -2026,6 +2058,15 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
 
             // Bootstrap
             document.addEventListener('DOMContentLoaded', () => {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const todayStr = `${year}-${month}-${day}`;
+                
+                document.getElementById('filter-start-date').value = todayStr;
+                document.getElementById('filter-end-date').value = todayStr;
+
                 loadDashboardData();
             });
 
@@ -2061,6 +2102,7 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                         populateMedicalAlerts(adminState.medicalAlerts);
                         populateLeaderboards(adminState.leaderboardDistance, adminState.leaderboardLaps);
                         populateMedicalAnalysis(data.medical_issues, data.total_runs_analyzed);
+                        applyFilters();
                     } else if (data.status === 'unauthorized') {
                         window.location.reload();
                     } else {
@@ -2289,7 +2331,7 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                     filtered = filtered.filter(r => new Date(r.created_at) <= end);
                 }
 
-                let csv = "Nama Pelari,Usia,Jenis Kelamin,No. Handphone,Alamat Domisili,Terdaftar Pada\n";
+                let csv = "sep=,\r\nNama Pelari,Usia,Jenis Kelamin,No. Handphone,Alamat Domisili,Terdaftar Pada\n";
                 filtered.forEach(r => {
                     const regDate = new Date(r.created_at).toLocaleDateString('id-ID', { year: 'numeric', month: 'numeric', day: 'numeric' });
                     const name = `"${r.fullname.replace(/"/g, '""')}"`;
@@ -2316,7 +2358,7 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                     filtered = filtered.filter(r => new Date(r.post_time) <= end);
                 }
 
-                let csv = "Nama Pelari,Tanggal Selesai,Jumlah Lap,Jarak Tempuh (km),Durasi (menit),Kalori (kcal),Skor Kesehatan\n";
+                let csv = "sep=,\r\nNama Pelari,Tanggal Selesai,Jumlah Lap,Jarak Tempuh (km),Durasi (menit),Kalori (kcal),Skor Kesehatan\n";
                 filtered.forEach(r => {
                     const dateStr = new Date(r.post_time).toLocaleDateString('id-ID', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
                     const name = `"${r.fullname.replace(/"/g, '""')}"`;
@@ -2475,17 +2517,30 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                 const list = document.getElementById('medical-alerts-list');
                 const count = document.getElementById('medical-alerts-count');
                 
-                if (!alerts || alerts.length === 0) {
+                // Filter alerts to only show those that match today's computer date
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const todayStr = `${year}-${month}-${day}`;
+                
+                const todayAlerts = (alerts || []).filter(alert => {
+                    if (!alert.created_at) return false;
+                    const alertDate = alert.created_at.split(' ')[0].split('T')[0];
+                    return alertDate === todayStr;
+                });
+                
+                if (todayAlerts.length === 0) {
                     panel.style.display = 'none';
                     list.innerHTML = '';
                     count.innerText = '0 Peringatan';
                     stopSirenSound();
                 } else {
                     panel.style.display = 'block';
-                    count.innerText = `${alerts.length} Peringatan Medis`;
+                    count.innerText = `${todayAlerts.length} Peringatan Medis`;
                     list.innerHTML = '';
                     
-                    alerts.forEach(alert => {
+                    todayAlerts.forEach(alert => {
                         const statusColor = alert.status === 'started' ? 'background: #fef3c7; color: #92400e;' : 'background: #d1fae5; color: #065f46;';
                         const statusText = alert.status === 'started' ? 'Sedang Berlari' : 'Selesai';
                         const warningsHTML = alert.warnings.map(w => `
@@ -3167,11 +3222,11 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                     body.innerHTML += `
                         <tr>
                             <td style="text-align: center; font-weight: 600;">${idx + 1}.</td>
-                            <td style="font-weight: 600;">${r.fullname}</td>
+                            <td style="font-weight: 600;" class="col-name">${r.fullname}</td>
                             <td>${r.age} Thn</td>
                             <td><span class="gender-badge ${r.gender.toLowerCase()}">${r.gender === 'L' ? 'L' : 'P'}</span></td>
                             <td>${r.phone}</td>
-                            <td>${r.address}</td>
+                            <td class="col-address">${r.address}</td>
                             <td>${regDate}</td>
                             <td style="text-align: center;">
                                 <button class="btn-table-action" onclick="openRunnerModal(${r.id})">Buka Profil</button>
@@ -3234,14 +3289,14 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
                     body.innerHTML += `
                         <tr>
                             <td style="text-align: center; font-weight: 600;">${idx + 1}.</td>
-                            <td style="font-weight: 600;">${r.fullname}${medBadge}</td>
-                            <td>📍 <b>${r.location_name || 'Lokasi Umum'}</b></td>
+                            <td style="font-weight: 600;" class="col-name">${r.fullname}${medBadge}</td>
+                            <td class="col-location">📍 <b>${r.location_name || 'Lokasi Umum'}</b></td>
                             <td>${dateStr}</td>
                             <td>${r.post_laps} lap</td>
                             <td>${distanceKm} km</td>
                             <td>${r.post_duration} mnt</td>
                             <td>${r.post_calories} kcal</td>
-                            <td><span class="run-badge ${scoreClass}">${score} / 100</span></td>
+                            <td style="text-align: center;"><span class="run-badge ${scoreClass}">${score} / 100</span></td>
                         </tr>
                     `;
                 });

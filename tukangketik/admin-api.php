@@ -251,8 +251,8 @@ switch ($action) {
             $stmtAlerts = $db->prepare("SELECT r.*, u.fullname, u.phone, u.gender, u.dob
                 FROM runs r
                 JOIN users u ON r.user_id = u.id
-                WHERE r.created_at >= ? AND r.medical_status = 'pending'
-                ORDER BY r.created_at DESC");
+                WHERE r.pre_time >= ? AND r.medical_status = 'pending'
+                ORDER BY r.pre_time DESC");
             $stmtAlerts->execute([$todayStart]);
             $todayRuns = $stmtAlerts->fetchAll();
 
@@ -304,7 +304,7 @@ switch ($action) {
                         'phone' => $run['phone'],
                         'status' => $run['status'],
                         'warnings' => $warnings,
-                        'created_at' => $run['created_at']
+                        'created_at' => $run['pre_time']
                     ];
                 }
             }

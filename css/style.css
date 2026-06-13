@@ -57,6 +57,7 @@ body {
     border-left: 1px solid rgba(255, 0, 127, 0.05);
     border-right: 1px solid rgba(255, 0, 127, 0.05);
     padding-bottom: 80px; /* Space for bottom nav */
+    overflow-x: hidden; /* Prevent horizontal scroll overflow */
 }
 
 /* Pages */
@@ -74,6 +75,7 @@ body {
     flex-direction: column;
     opacity: 1;
     transform: translateY(0);
+    animation: fadeIn 0.35s ease-out forwards;
 }
 
 /* Loading Overlay */
@@ -197,7 +199,7 @@ p {
     border: 1.5px solid var(--card-border);
     border-radius: 14px;
     color: var(--text-main);
-    font-size: 15px;
+    font-size: 16px;
     outline: none;
     transition: var(--transition);
 }
@@ -846,4 +848,16 @@ p {
     height: 48px;
     color: var(--text-muted);
     opacity: 0.5;
+}
+
+@media (max-width: 380px) {
+    .metric-comparison-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .metric-values {
+        width: 100%;
+        justify-content: space-between;
+    }
 }
