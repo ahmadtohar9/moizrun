@@ -61,34 +61,38 @@ require_once __DIR__ . '/db.php';
         
         <!-- ================= PAGE 1: LANDING ================= -->
         <div class="page active" id="page-landing">
-            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px 10px;">
-                <div class="avatar-ring mb-4" style="width: 80px; height: 80px; padding: 3px;">
+            <div class="auth-header text-center mb-6" style="margin-top: 20px;">
+                <div class="avatar-ring mb-3 animate-pulse-slow" style="width: 80px; height: 80px; padding: 3px; margin: 0 auto;">
                     <div class="avatar-inner" style="font-size: 36px;"><?= htmlspecialchars(getSetting('app_logo', '🏃')) ?></div>
                 </div>
                 <h1><?= htmlspecialchars(getSetting('app_name', 'STADION RUN')) ?></h1>
-                <p class="subtitle" style="font-size: 15px; margin-top: 8px;">Aplikasi Monitoring Kesehatan & Evaluasi Lari Sore Anda</p>
+                <p style="font-size: 14px; color: var(--text-muted); margin-top: 4px; margin-bottom: 0; line-height: 1.4;">
+                    Aplikasi Monitoring Kesehatan & Evaluasi Lari Sore Anda
+                </p>
+            </div>
+            
+            <div class="card auth-card text-center">
+                <p style="color: var(--text-main); font-size: 14px; margin-bottom: 24px; line-height: 1.6;">
+                    Pindai QR Code di stadion, isi data vital sebelum dan sesudah lari, dan dapatkan skor kesehatan latihan Anda secara otomatis!
+                </p>
                 
-                <div class="card" style="width: 100%; background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05); margin-bottom: 30px;">
-                    <p style="color: var(--text-main); font-size: 14px;">
-                        Pindai QR Code di stadion, isi data vital sebelum dan sesudah lari, dan dapatkan skor kesehatan latihan Anda secara otomatis!
-                    </p>
-                </div>
-                
-                <button id="btn-landing-login" onclick="navigateTo('login')" class="btn mb-4">
+                <button id="btn-landing-login" onclick="navigateTo('login')" class="btn btn-pulse mb-4">
                     <span>Masuk ke Akun</span>
                     <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
                 </button>
-                <p class="mb-4">Belum punya akun? <a id="link-landing-register" onclick="navigateTo('register')" class="link-action">Daftar Sekarang</a></p>
-                
-                <!-- Install App Prompts (Only shown if PWA is installable) -->
-                <div id="pwa-install-container" class="card mt-4" style="display: none; width: 100%; border: 1px dashed var(--primary); background: rgba(255, 0, 127, 0.05); padding: 16px; border-radius: 16px;">
-                    <p style="font-size: 14px; color: var(--text-main); margin-bottom: 12px; font-weight: 500;">
-                        📲 Pasang aplikasi di HP Anda untuk akses lebih cepat & offline!
-                    </p>
-                    <button id="btn-pwa-install" class="btn" style="background: linear-gradient(135deg, var(--primary), #ff0055); width: auto; font-size: 14px; padding: 8px 16px; margin: 0 auto;">
-                        <span>Pasang Aplikasi</span>
-                    </button>
-                </div>
+                <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 0;">
+                    Belum punya akun? <a id="link-landing-register" onclick="navigateTo('register')" class="link-action">Daftar Sekarang</a>
+                </p>
+            </div>
+            
+            <!-- Install App Prompts (Only shown if PWA is installable) -->
+            <div id="pwa-install-container" class="card mt-4" style="display: none; text-align: center; border: 1px dashed var(--primary); background: rgba(255, 0, 127, 0.05); padding: 16px; border-radius: 16px;">
+                <p style="font-size: 14px; color: var(--text-main); margin-bottom: 12px; font-weight: 500;">
+                    📲 Pasang aplikasi di HP Anda untuk akses lebih cepat & offline!
+                </p>
+                <button id="btn-pwa-install" class="btn" style="background: linear-gradient(135deg, var(--primary), #ff0055); width: auto; font-size: 14px; padding: 8px 16px; margin: 0 auto;">
+                    <span>Pasang Aplikasi</span>
+                </button>
             </div>
         </div>
 
