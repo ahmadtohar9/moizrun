@@ -35,7 +35,7 @@ require_once __DIR__ . '/db.php';
     <meta name="keywords" content="running health tracker, stadion run, kesehatan lari, hitung bmi, detak jantung, bbi broca">
     
     <!-- Styling -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
     
     <!-- PWA Manifest -->
     <?php
@@ -595,7 +595,7 @@ require_once __DIR__ . '/db.php';
     </div>
 
     <!-- Application Script -->
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=<?= filemtime(__DIR__ . '/js/app.js') ?>"></script>
     
     <!-- Register PWA Service Worker -->
     <script>
