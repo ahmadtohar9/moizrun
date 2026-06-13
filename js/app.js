@@ -233,6 +233,36 @@ async function apiCall(action, data = {}) {
     }
 }
 
+// Force Clear PWA Cache & Update App
+async function forceClearPWACache() {
+    showLoading(true);
+    try {
+        // 1. Unregister all service workers
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+                await registration.unregister();
+            }
+        }
+        // 2. Delete all cache storages
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            for (let cacheName of cacheNames) {
+                await caches.delete(cacheName);
+            }
+        }
+        
+        showAlert('Aplikasi berhasil diperbarui! Memuat ulang...', 'success');
+        setTimeout(() => {
+            // Redirect using a query param timestamp to force HTTP cache bypass on server
+            window.location.href = window.location.pathname + '?t=' + Date.now();
+        }, 1200);
+    } catch (err) {
+        showAlert('Gagal memperbarui aplikasi: ' + err.message, 'error');
+        showLoading(false);
+    }
+}
+
 // --- CORE CALCULATIONS (RUMUS KESEHATAN) ---
 
 /**

@@ -83,10 +83,14 @@ require_once __DIR__ . '/db.php';
                 <button id="btn-landing-login" onclick="navigateTo('login')" class="btn btn-pulse mb-4">
                     <span>Masuk ke Akun</span>
                     <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                </button>
                 <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 0;">
                     Belum punya akun? <a id="link-landing-register" onclick="navigateTo('register')" class="link-action">Daftar Sekarang</a>
                 </p>
+                <div style="margin-top: 25px;">
+                    <a onclick="forceClearPWACache()" class="link-action" style="font-size: 11px; color: var(--text-muted); text-decoration: none; opacity: 0.7; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
+                        🔄 Hubungkan Ulang & Perbarui Aplikasi (Hapus Cache)
+                    </a>
+                </div>
             </div>
             
             <!-- Install App Prompts (Only shown if PWA is installable) -->
@@ -139,6 +143,10 @@ require_once __DIR__ . '/db.php';
                 Belum memiliki akun? <a id="link-login-register" onclick="navigateTo('register')" class="link-action">Daftar di sini</a>
                 <br><br>
                 <a onclick="navigateTo('forgot-password')" class="link-action" style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Lupa Password?</a>
+                <br><br>
+                <a onclick="forceClearPWACache()" class="link-action" style="font-size: 11px; color: var(--text-muted); text-decoration: none; opacity: 0.7; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
+                    🔄 Hubungkan Ulang & Perbarui Aplikasi (Hapus Cache)
+                </a>
             </p>
 
             <!-- Install App Prompts for Login Page -->
@@ -405,6 +413,11 @@ require_once __DIR__ . '/db.php';
                     <li>Segera melambat / jalan kaki jika detak jantung melampaui batas 85% HRmaks.</li>
                     <li>Minum air putih secukupnya demi mencegah dehidrasi.</li>
                 </ul>
+                <div style="margin-top: 30px; text-align: center;">
+                    <a onclick="forceClearPWACache()" class="link-action" style="font-size: 11px; color: var(--text-muted); text-decoration: none; opacity: 0.7; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
+                        🔄 Perbarui Aplikasi (Hapus Cache)
+                    </a>
+                </div>
             </div>
         </div>
 
