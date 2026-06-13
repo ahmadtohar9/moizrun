@@ -2058,14 +2058,9 @@ $isAdminLoggedIn = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logge
 
             // Bootstrap
             document.addEventListener('DOMContentLoaded', () => {
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
-                const todayStr = `${year}-${month}-${day}`;
-                
-                document.getElementById('filter-start-date').value = todayStr;
-                document.getElementById('filter-end-date').value = todayStr;
+                // Biarkan filter tanggal kosong di awal agar semua data pelari & statistik default tampil (All-Time)
+                document.getElementById('filter-start-date').value = '';
+                document.getElementById('filter-end-date').value = '';
 
                 loadDashboardData();
             });
