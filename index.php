@@ -613,8 +613,23 @@ require_once __DIR__ . '/db.php';
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('<?= $base_path ?>/sw.js')
-                    .then((reg) => console.log('PWA Service Worker registered successfully:', reg.scope))
+                navigator.serviceWorker.register('<?= $base_path ?>/sw.js?v=<?= filemtime(__DIR__ . '/sw.js') ?>')
+                    .then((reg) => {
+                        console.log('PWA Service Worker registered successfully:', reg.scope);
+                        
+                        // Detect updates to service worker and auto reload page to break cache
+                        reg.onupdatefound = () => {
+                            const installingWorker = reg.installing;
+                            installingWorker.onstatechange = () => {
+                                if (installingWorker.state === 'installed') {
+                                    if (navigator.serviceWorker.controller) {
+                                        console.log('New update available, reloading to apply changes...');
+                                        window.location.reload();
+                                    }
+                                }
+                            };
+                        };
+                    })
                     .catch((err) => console.error('PWA Service Worker registration failed:', err));
             });
         }
